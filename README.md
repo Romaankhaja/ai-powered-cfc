@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CarbonIQ — AI-Powered Carbon Footprint Intelligence Platform
 
 <div align="center">
@@ -237,3 +238,6 @@ CarbonIQ uses an OpenAI-compatible API interface. Swap providers by changing env
 ## 📄 License
 
 MIT License · Built with 💚 for the planet
+=======
+# ai-powered-cfc
+>>>>>>> 1005783e4eb3298905e8be36ab699501992227df
