@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  # ── Backend ────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: carboniq-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://openai.com/v1}
+      - OPENAI_MODEL=${OPENAI_MODEL:-llama3.2}
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+      - AIR_QUALITY_API_KEY=${AIR_QUALITY_API_KEY}
+      - ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── Frontend ───────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: carboniq-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_APP_NAME=CarbonIQ
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: carboniq-network
